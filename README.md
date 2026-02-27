@@ -144,4 +144,4 @@ For standard local testing without Surfpool, just run anchor test.
 
 ### Screenshot
 
-![A screenshot of the smg-emoji Minted NFT](https://res.cloudinary.com/da8vqkdmt/image/upload/v1770498098/Screen_Shot_2026-02-07_at_9.57.54_PM_iuttpj.png)
+![A screenshot of the passing test](https://res.cloudinary.com/da8vqkdmt/image/upload/v1772191517/Screen_Shot_2026-02-27_at_12.23.31_PM_do3b3w.png)
