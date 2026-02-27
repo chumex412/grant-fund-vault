@@ -20,7 +20,7 @@ pub struct InitializeDao<'info> {
     )]
     pub sender_ata: InterfaceAccount<'info, TokenAccount>,
     #[account(
-        init,
+        init_if_needed,
         payer = authority,
         space = GrantDAO::DISCRIMINATOR.len() + GrantDAO::INIT_SPACE,
         seeds = [b"dao"],
