@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::{GrantDAO, Milestone, ProposalState, ProposalStatus};
+use crate::{GrantDAO, Milestone, MilestoneStatus, ProposalState, ProposalStatus};
 
 #[derive(Accounts)]
 pub struct InitializeProposal<'info> {
@@ -30,7 +30,7 @@ impl<'info> InitializeProposal<'info> {
         let dao = &mut self.dao;
         let proposer = &self.proposer;
 
-        require!(proposal.total_amount > 0, CreateCustomError::InvalidAmount);
+        require!(total_amount > 0, CreateCustomError::InvalidAmount);
 
         proposal.dao = dao.key();
         proposal.milestone_count = 0;
@@ -38,7 +38,7 @@ impl<'info> InitializeProposal<'info> {
         proposal.bump = bump.proposal;
         proposal.created_at = Clock::get()?.unix_timestamp;
         proposal.total_amount = total_amount;
-        proposal.approval_status = 0;
+        proposal.approval_status = ProposalStatus::Pending as u8;
 
         Ok(())
     }
@@ -73,7 +73,7 @@ impl<'info> CreateMilestone<'info> {
 
         milestone.proposal = proposal.key();
         milestone.index = proposal.milestone_count;
-        milestone.status = 0;
+        milestone.status = MilestoneStatus::Pending as u8;
         milestone.amount = amount;
 
         proposal.milestone_count += 1;

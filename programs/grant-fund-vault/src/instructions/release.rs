@@ -106,7 +106,7 @@ impl<'info> Release<'info> {
         Ok(())
     }
 
-    pub fn approve_release(&mut self) -> Result<()> {
+    pub fn approve_release(&mut self, bumps: &ReleaseBumps) -> Result<()> {
         require!(
             MilestoneStatus::get_milestone_status(self.milestone.status) == Some(MilestoneStatus::Approved), 
             CustomError::MilestoneNotApproved
@@ -118,7 +118,6 @@ impl<'info> Release<'info> {
         );
 
         let proposal_key = self.proposal.key();
-        let state_bump = self.vault_state.bump;
         let vault_state = &mut self.vault_state;
 
         let transfer_account = TransferChecked {
@@ -131,7 +130,7 @@ impl<'info> Release<'info> {
         let seeds: &[&[u8]] = &[
             b"vault_authority",
             proposal_key.as_ref(),
-            &[state_bump]
+            &[bumps.vault_authority]
         ];
 
         let signer_seed = &[seeds];
@@ -160,7 +159,7 @@ impl<'info> Release<'info> {
         Ok(())
     }
 
-    pub fn refund(&mut self, index:u8) -> Result<()> {
+    pub fn refund(&mut self, index:u8,  bumps: &ReleaseBumps) -> Result<()> {
          require!(self.milestone.index == index, CustomError::InvalidMilestone);
         require!(
             self.milestone.index < self.proposal.milestone_count,
@@ -172,7 +171,6 @@ impl<'info> Release<'info> {
         );
 
         let proposal_key = self.proposal.key();
-        let state_bump = self.vault_state.bump;
 
         let transfer_accounts = TransferChecked {
             from: self.vault.to_account_info(),
@@ -184,7 +182,7 @@ impl<'info> Release<'info> {
         let seeds: &[&[u8]] = &[
             b"vault_authority",
             proposal_key.as_ref(),
-            &[state_bump]
+            &[bumps.vault_authority]
         ];
 
         let signer_seeds = &[seeds];

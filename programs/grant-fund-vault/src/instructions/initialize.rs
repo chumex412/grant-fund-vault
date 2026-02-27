@@ -28,7 +28,7 @@ pub struct InitializeDao<'info> {
     )]
     pub dao: Account<'info, GrantDAO>,
     #[account(
-        init,
+        init_if_needed,
         payer = authority,
         token::mint = treasury_mint,
         token::authority = dao,

@@ -26,7 +26,7 @@ pub mod grant_fund_vault {
         ctx.accounts.create_milestone(amount)
     }
 
-    pub fn submit_proposal(ctx: Context<Submit>, deadline: i64) -> Result<()> {
+    pub fn submit_proposal(ctx: Context<SubmitProposal>) -> Result<()> {
         ctx.accounts.submit_proposal()
     }
 
@@ -36,17 +36,19 @@ pub mod grant_fund_vault {
         ctx.accounts.transfer_to_vault()
     }
 
-    pub fn submit_milestone(ctx: Context<Submit>, index: u8) -> Result<()> {
+    pub fn submit_milestone(ctx: Context<SubmitMilestone>, index: u8) -> Result<()> {
         ctx.accounts.submit_milestone(index)
     }
 
     pub fn approve_milestone_for_release(ctx: Context<Release>, index: u8) -> Result<()> {
         ctx.accounts.approve_milestone(index)?;
 
-        ctx.accounts.approve_release()
+        ctx.accounts.approve_release(&ctx.bumps)
     }
 
     pub fn reject_milestone(ctx: Context<Release>, index: u8) -> Result<()> {
-        ctx.accounts.refund(index)
+        ctx.accounts.reject_milestone(index)?;
+
+        ctx.accounts.refund(index, &ctx.bumps)
     }
 }

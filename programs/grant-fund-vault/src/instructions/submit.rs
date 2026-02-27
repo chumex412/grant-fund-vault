@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 use crate::{GrantDAO, Milestone, MilestoneStatus, ProposalState, ProposalStatus};
 
 #[derive(Accounts)]
-pub struct Submit<'info> {
+pub struct SubmitProposal<'info> {
     #[account(mut)]
     proposer: Signer<'info>,
     #[account(mut)]
@@ -14,17 +14,11 @@ pub struct Submit<'info> {
         has_one = proposer,
     )]
     proposal: Account<'info, ProposalState>,
-    #[account(
-        mut,
-        has_one = proposal,
-        constraint = milestone.status == 0
-    )]
-    milestone: Account<'info, Milestone>,
 
     system_program: Program<'info, System>,
 }
 
-impl<'info> Submit<'info> {
+impl<'info> SubmitProposal<'info> {
     pub fn submit_proposal(&mut self) -> Result<()> {
         let proposal = &mut self.proposal;
         let dao = &mut self.dao;
@@ -49,7 +43,31 @@ impl<'info> Submit<'info> {
 
         Ok(())
     }
+}
 
+#[derive(Accounts)]
+pub struct SubmitMilestone<'info> {
+    #[account(mut)]
+    proposer: Signer<'info>,
+    #[account(mut)]
+    dao: Account<'info, GrantDAO>,
+    #[account(
+        mut,
+        has_one = dao,
+        has_one = proposer,
+    )]
+    proposal: Account<'info, ProposalState>,
+    #[account(
+        mut,
+        has_one = proposal,
+        constraint = milestone.status == 0
+    )]
+    milestone: Account<'info, Milestone>,
+
+    system_program: Program<'info, System>,
+}
+
+impl<'info> SubmitMilestone<'info> {
     pub fn submit_milestone(&mut self, index: u8) -> Result<()> {
         require!(
             self.milestone.index == index,

@@ -43,7 +43,7 @@ pub struct Approve<'info> {
     )]
     pub vault_state: Account<'info, VaultState>,
     #[account(
-        init,
+        init_if_needed,
         payer = authority,
         associated_token::mint = treasury_mint,
         associated_token::authority = vault_authority,
