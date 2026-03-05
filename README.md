@@ -41,13 +41,11 @@ A Grant Funding vault contract built with Anchor. It implements a simple grandin
 
 ### Challenge
 
-To design and implement a Vault in Anchor with a unique constraint.
+The aim of the contract is to reduce the time between proposal submission, approval, and the disbursement of funds. This eliminates the need for additional voting besides the DAO representative and delays while waiting for the release of the funds after approval.
 
 ### Solution
 
-My solution to the unique constraint vault contract was designing and implementing a Grant funding milestone vault contract.
-
-The contract included the following:
+My solution was designing and implementing a Grant funding milestone vault contract that included the following:
 
 - Accounts
 

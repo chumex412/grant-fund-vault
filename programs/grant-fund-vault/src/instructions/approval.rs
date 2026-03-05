@@ -8,7 +8,6 @@ use crate::{GrantDAO, ProposalState, ProposalStatus, VaultState};
 
 #[derive(Accounts)]
 pub struct Approve<'info> {
-    pub proposer: Signer<'info>,
     #[account(
         mut,
         constraint = authority.key() == dao.authority
@@ -22,7 +21,6 @@ pub struct Approve<'info> {
     #[account(
         mut,
         has_one = dao,
-        constraint = proposer.key() == proposal.proposer,
         constraint = proposal.milestone_count >= 1,
         constraint = proposal.approval_status == 1,
     )]
@@ -73,12 +71,11 @@ impl<'info> Approve<'info> {
 
         let vault_state = &mut self.vault_state;
         let proposal = &mut self.proposal;
-        let proposer = &self.proposer;
 
         proposal.approval_status = 2;
 
         vault_state.proposal = proposal.key();
-        vault_state.beneficiary = proposer.key();
+        vault_state.beneficiary = proposal.proposer;
         vault_state.total_amount = self.proposal.total_amount;
         vault_state.bump = bump.vault_state;
         vault_state.released_amount = 0;

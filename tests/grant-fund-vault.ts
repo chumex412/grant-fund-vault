@@ -232,7 +232,6 @@ describe("Grant fund/Milestone vault", () => {
     await program.methods
       .approveProposal()
       .accountsStrict({
-        proposer: proposer.publicKey,
         authority: daoAuthority.publicKey,
         dao: daoPda,
         proposal: proposalPda,
@@ -245,7 +244,6 @@ describe("Grant fund/Milestone vault", () => {
         systemProgram: anchor.web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .signers([proposer])
       .rpc();
 
     const vaultStateAccount = await program.account.vaultState.fetch(
@@ -400,7 +398,6 @@ describe("Grant fund/Milestone vault", () => {
     await program.methods
       .approveProposal()
       .accountsStrict({
-        proposer: proposer.publicKey,
         authority: daoAuthority.publicKey,
         dao: daoPda,
         proposal: proposalPda,
@@ -413,7 +410,6 @@ describe("Grant fund/Milestone vault", () => {
         systemProgram: anchor.web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .signers([proposer])
       .rpc();
 
     const vaultStateAccount = await program.account.vaultState.fetch(
